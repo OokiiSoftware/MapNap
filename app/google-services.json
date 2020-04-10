@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "407325453989",
+    "firebase_url": "https://slznet-5685e.firebaseio.com",
+    "project_id": "slznet-5685e",
+    "storage_bucket": "slznet-5685e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:407325453989:android:524416ec1e779d0090e74c",
+        "android_client_info": {
+          "package_name": "com.ookiisoftware.mapnap"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "407325453989-4odohmtfsfc32491usq3qlocpievearo.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ookiisoftware.mapnap",
+            "certificate_hash": "704c32eae3735edac401ba1a3e061aff9641c7ca"
+          }
+        },
+        {
+          "client_id": "407325453989-p9r1kb7gmiheh5tiu0f4c0h4e2rr47m1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD_9NP8aC2gRBhPXF6eBHt3rvM-LKqYcUo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "407325453989-p9r1kb7gmiheh5tiu0f4c0h4e2rr47m1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

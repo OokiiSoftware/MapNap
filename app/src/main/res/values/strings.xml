@@ -1,0 +1,28 @@
+<resources>
+    <string name="app_name">Map Nap</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="action_settings">Configurações</string>
+
+    <string name="login">Login</string>
+    <string name="action_sair">Fechar app</string>
+    <string name="action_logout">Logout</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="title_activity_main">Main</string>
+    <string name="title_activity_login">Login</string>
+    <string name="hint_usuario">Usuário</string>
+    <string name="hint_senha">Senha</string>
+
+    <string name="tab_text_0">FUNCIONÁRIOS</string>
+    <string name="tab_text_1">CONVERSAS</string>
+    <string name="tab_text_2">MAPA</string>
+
+    <!--Menus em geral-->
+    <string name="menu_logout">Logout</string>
+    <string name="menu_pesquisa">Pesquisar</string>
+    <string name="menu_add_contato">Adicionar Contato</string>
+
+    <string name="menu_batepapo">Batepapo</string>
+    <string name="menu_postar_feed">Fazer uma postar</string>
+    <string name="conversa_caixa_de_texto">Digite aqui</string>
+</resources>

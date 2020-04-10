@@ -1,0 +1,21 @@
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".activity.MainActivity">
+
+    <item
+        android:id="@+id/action_pesquisa"
+        android:title="@string/menu_pesquisa"
+        android:icon="@drawable/ic_pesquisa"
+        app:showAsAction="ifRoom"/>
+    <item
+        android:id="@+id/action_logout"
+        android:title="@string/action_logout"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/action_sair"
+        android:title="@string/action_sair"
+        app:showAsAction="ifRoom" />
+</menu>
