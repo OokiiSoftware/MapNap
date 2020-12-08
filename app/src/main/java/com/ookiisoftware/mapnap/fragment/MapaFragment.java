@@ -56,28 +56,23 @@ import com.ookiisoftware.mapnap.auxiliar.Constantes;
 import com.ookiisoftware.mapnap.auxiliar.Import;
 import com.ookiisoftware.mapnap.auxiliar.Import.Log;
 import com.ookiisoftware.mapnap.modelo.Caixa;
-import com.ookiisoftware.mapnap.modelo.ClusterManagerItem;
+import com.ookiisoftware.mapnap.modelo.CaixaAlterada;
+import com.ookiisoftware.mapnap.auxiliar.ClusterManagerItem;
 import com.ookiisoftware.mapnap.modelo.ClusterRendererItem;
 import com.ookiisoftware.mapnap.modelo.Endereco;
 import com.ookiisoftware.mapnap.modelo.ClusterMarkerItem;
-import com.ookiisoftware.mapnap.data.DataCaixa;
 import com.ookiisoftware.mapnap.modelo.PerfilDeAcesso;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
 import static com.ookiisoftware.mapnap.auxiliar.Import.get.BarraDeLoad;
 
-public class MapaFragment extends Fragment
-        implements OnMapReadyCallback,
-        GoogleMap.OnMapClickListener,
-        LocationListener,
-        ClusterManager.OnClusterItemClickListener<ClusterMarkerItem> {
+public class MapaFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnMapClickListener, LocationListener, ClusterManager.OnClusterItemClickListener<ClusterMarkerItem> {
 
     //region VARIAVEIS
 
@@ -121,7 +116,7 @@ public class MapaFragment extends Fragment
 
     //endregion
 
-    public MapaFragment(){}
+    public MapaFragment() {}
 
     //region SOBRESCRITAS DE MÉTODOS
 
@@ -486,11 +481,9 @@ public class MapaFragment extends Fragment
             c.setLatitude(lat);
             c.setLongitude(lng);
             c.setPon(pon);
-            c.setStatus("LIVRE");
             c.setExcluido(false);
             c.setPortas(portas);
             c.setData(Import.get.Data());
-            c.setClientes(new ArrayList<String>());
             c.setId_usuario(Import.usuario.getId(getContext(), false));
             c.setEndereco(endereco);
 
@@ -503,7 +496,7 @@ public class MapaFragment extends Fragment
                 }
 
             Fab(ACAO_FECHAR);
-            DataCaixa.Add(c);
+                c.Salvar(false);
         } catch (SecurityException e) {
             Log.e(TAG, "SalvarCaixa", e.getMessage());
         }
@@ -511,18 +504,23 @@ public class MapaFragment extends Fragment
 
     private void AtualizarCaixa(Caixa c, Integer pon, Integer portasUsadas) {
         Caixa c2 = Import.get.NewCaixa(c);
-        DataCaixa.AddAlterada(c2);
+        CaixaAlterada.Salvar(c2);
+//        DataCaixa.AddAlterada(c2);
 
-        if(portasUsadas != null)
-            for(int i = 0; i < portasUsadas; i++)
+        if (portasUsadas != null)
+            for (int i = 0; i < portasUsadas; i++)
                 c.getClientes().add((i + 1) + ";CLIENTE");
 
         c.setId_usuario(Import.usuario.getId(getContext(), false));
         c.setData(Import.get.Data());
-            if(pon != null)
-                if(pon < 1)
-                    c.setPon(pon);
-        DataCaixa.Update(c, portasUsadas != null, pon != null);
+        if (pon != null)
+            if (pon < 1)
+                c.setPon(pon);
+
+        if (pon != null)
+            c.SalvarPon();
+        if (portasUsadas != null)
+            c.SalvarClientes();
     }
 
     private boolean ExcluirCaixa(Caixa c, String senha, String motivo){
@@ -544,19 +542,15 @@ public class MapaFragment extends Fragment
         else {
             c.setMotivo(motivo);
             Fab(ACAO_FECHAR);
-            c.setExcluido(true);
-            DataCaixa.Update(c, false, false);
-            DataCaixa.Add(c, true);
-            DataCaixa.Remove(c);
+            c.Remove();
             return true;
         }
     }
 
     private void CaixaEmManutencao(Caixa c, boolean acao) {
-        c.setEm_manutencao(acao);
         c.setData(Import.get.Data());
         c.setId_usuario(Import.usuario.getId(getContext(), false));
-        DataCaixa.Manutencao(c);
+        c.SalvarEmManutencao(acao);
     }
 
     private String Alert_Text_Titulo() {
@@ -645,7 +639,7 @@ public class MapaFragment extends Fragment
             fab_alert.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    boolean acao = !caixa_selecionada.isEm_manutencao();
+                    boolean acao = !caixa_selecionada.isIsEmManutencao();
                     CaixaEmManutencao(caixa_selecionada, acao);
                     Fab(ACAO_FECHAR);
                     BarraDeLoad(progressBar, true);
@@ -675,7 +669,6 @@ public class MapaFragment extends Fragment
                                 c.setId(dataSnapshot.getKey());
                                 Caixa c2 = ProcurarCaixa(c.getId());
                                 if(c2 == null){
-                                    PrepararCaixa(c);
                                     caixas.add(c);
                                     AddMarkerAsync.removeCallbacks(delayParaAddMarkers);
                                     AddMarkerAsync.postDelayed(delayParaAddMarkers, Constantes.MENU_TIME_TO_HIDE);
@@ -688,7 +681,6 @@ public class MapaFragment extends Fragment
                             Caixa c = dataSnapshot.getValue(Caixa.class);
                             if (c != null) {
                                 c.setId(dataSnapshot.getKey());
-                                PrepararCaixa(c);
                                 Caixa d = ProcurarCaixa(c.getId());
                                 if (d != null) {
                                     caixas.set(caixas.indexOf(d), c);
@@ -764,9 +756,11 @@ public class MapaFragment extends Fragment
     }
 
     private void Fab(int opcao) {
+        ClusterManagerItem.canSearchEndereco = false;
         if(meuPerfil.isCaixaAdicionar())
             switch (opcao){
             case ACAO_ADD_MARKER:{
+                ClusterManagerItem.canSearchEndereco = true;
                 fab_botton.setImageResource(R.drawable.ic_close);
                 fab_botton.setTag(ACAO_FECHAR);
                 fab_top.setImageResource(R.drawable.ic_ok);
@@ -827,12 +821,6 @@ public class MapaFragment extends Fragment
                 break;
             }
         }
-    }
-
-    private void PrepararCaixa(Caixa c){
-        if(c.getClientes() == null)
-            c.setClientes(new ArrayList<String>());
-        c.setStatus(c.getClientes().size() == c.getPortas() ? "CHEIO" : "LIVRE");
     }
 
     private boolean CheckGooglePlayServices() {
@@ -915,7 +903,7 @@ public class MapaFragment extends Fragment
                         ClusterMarkerItem clusterItem = new ClusterMarkerItem(c.getId(), local, c.getNome(), MarkerSnipet(c), icone);
                         clusterManager.addItem(clusterItem);
                         markers.add(clusterItem);
-                        Log.m(TAG, "AddMarker","Nome", c.getNome());
+//                        Log.m(TAG, "AddMarker","Nome", c.getNome());
                     }
                 } catch (SecurityException e) {
                     Log.e(TAG, "AddMarker", e.getMessage());
@@ -927,7 +915,8 @@ public class MapaFragment extends Fragment
         }
 
         private ClusterMarkerItem.icone GetMarkerIcon(Caixa c) {
-            if (c.isEm_manutencao())
+//            Log.e(TAG, "GetMarkerIcon", "Manu: " + c.getNome() + ": " + c.isIsEmManutencao());
+            if (c.isIsEmManutencao())
                 return ClusterMarkerItem.icone.Manutencao;
             return c.getStatus().equals("CHEIO") ?
                     c.getPon() == 0 ? ClusterMarkerItem.icone.GponCheio : ClusterMarkerItem.icone.PacPonCheio :
@@ -948,7 +937,7 @@ public class MapaFragment extends Fragment
                     return;
                 }
 
-                Log.m(TAG, "Async: AtualizarMarker","Marker atualizado ", c.getNome());
+//                Log.m(TAG, "Async: AtualizarMarker","Marker atualizado ", c.getNome());
 
                 clusterManager.removeItem(marker);
                 marker.setmSnippet(MarkerSnipet(c));

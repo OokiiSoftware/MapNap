@@ -22,7 +22,7 @@ public class DataCaixa {
     private static String TAG = "DataCaixa";
     private static Random random = new Random();
 
-    public static boolean Add(Caixa c){
+    public static boolean _Add(Caixa c){
         try{
             DatabaseReference reference = Import.getFirebase.getRaiz();
             reference.child(Constantes.Firebase.CHILD_CAIXAS).push().setValue(c);
@@ -32,7 +32,7 @@ public class DataCaixa {
             return false;
         }
     }
-    public static boolean Add(Caixa c, boolean excluidas){
+    public static boolean _Add(Caixa c, boolean excluidas){
         try{
             DatabaseReference reference = Import.getFirebase.getRaiz();
             reference.child(Constantes.Firebase.CHILD_CAIXAS_EXCLUIDAS).child(c.getId()).setValue(c);
@@ -42,7 +42,7 @@ public class DataCaixa {
             return false;
         }
     }
-    private static boolean Add(CaixaAlterada c){
+    private static boolean _Add(CaixaAlterada c){
         try{
             DatabaseReference reference = Import.getFirebase.getRaiz();
             reference.child(Constantes.Firebase.CHILD_CAIXAS_ALTERADAS).child(c.getId()).setValue(c);
@@ -91,7 +91,7 @@ public class DataCaixa {
         return caixas;
     }
 
-    public static boolean AddAlterada(final Caixa c){
+    public static boolean _AddAlterada(final Caixa c){
         int size = random.nextInt(10);
         c.setNovo_id(Import.get.RandomString(size));
         try{
@@ -110,7 +110,7 @@ public class DataCaixa {
                     if (cA.getCaixas() == null)
                         cA.setCaixas(new LinkedList<Caixa>());
                     cA.getCaixas().add(c);
-                    Add(cA);
+//                    Add(cA);
                 }
 
                 @Override
@@ -123,8 +123,10 @@ public class DataCaixa {
         }
     }
 
-    public static boolean Remove(Caixa c){
+    public static boolean _Remove(Caixa c){
         try{
+            c.Salvar(false);
+
             DatabaseReference reference = Import.getFirebase.getRaiz();
             reference.child(Constantes.Firebase.CHILD_CAIXAS).child(c.getId()).removeValue();
             return true;
@@ -134,7 +136,7 @@ public class DataCaixa {
         }
     }
 
-    public static boolean Update(Caixa c, boolean clientes, boolean pon){
+    public static boolean _Update(Caixa c, boolean clientes, boolean pon){
         try{
             DatabaseReference reference = Import.getFirebase.getRaiz();
 
@@ -165,11 +167,11 @@ public class DataCaixa {
         }
     }
 
-    public static boolean Manutencao(Caixa c) {
+    public static boolean _Manutencao(Caixa c) {
         try{
             DatabaseReference reference = Import.getFirebase.getRaiz();
 
-            reference.child(Constantes.Firebase.CHILD_CAIXAS).child(c.getId()).child(Constantes.Firebase.CHILD_ALERT).setValue(c.isEm_manutencao());
+            reference.child(Constantes.Firebase.CHILD_CAIXAS).child(c.getId()).child(Constantes.Firebase.CHILD_ALERT).setValue(c.isIsEmManutencao());
             reference.child(Constantes.Firebase.CHILD_CAIXAS).child(c.getId()).child(Constantes.Firebase.CHILD_ID_USUARIO).setValue(c.getId_usuario());
             reference.child(Constantes.Firebase.CHILD_CAIXAS).child(c.getId()).child(Constantes.Firebase.CHILD_DATA).setValue(c.getData());
             return true;

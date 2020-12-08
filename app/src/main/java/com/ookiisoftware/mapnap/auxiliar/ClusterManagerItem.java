@@ -1,4 +1,4 @@
-package com.ookiisoftware.mapnap.modelo;
+package com.ookiisoftware.mapnap.auxiliar;
 
 import android.content.Context;
 import android.location.Address;
@@ -14,6 +14,9 @@ import com.google.maps.android.MarkerManager;
 import com.google.maps.android.clustering.ClusterItem;
 import com.google.maps.android.clustering.ClusterManager;
 import com.ookiisoftware.mapnap.auxiliar.Import;
+import com.ookiisoftware.mapnap.modelo.ClusterMarkerItem;
+import com.ookiisoftware.mapnap.modelo.ClusterRendererItem;
+import com.ookiisoftware.mapnap.modelo.Endereco;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -21,6 +24,8 @@ import java.util.List;
 public class ClusterManagerItem<T extends ClusterItem> extends ClusterManager<ClusterMarkerItem> {
 
     private static final String TAG = "ClusterManagerItem";
+
+    public static boolean canSearchEndereco = false;
 
     private final GoogleMap map;
     private final List<ClusterMarkerItem> markers;
@@ -42,7 +47,8 @@ public class ClusterManagerItem<T extends ClusterItem> extends ClusterManager<Cl
         super.onCameraIdle();
         cameraPosition = map.getCameraPosition().target;
 
-        endereco = GetEndereco(cameraPosition);
+        if (canSearchEndereco)
+            endereco = GetEndereco(cameraPosition);
         String enderecoString;
         if(endereco == null){
             enderecoString = "Endereço não encontrado";
@@ -64,7 +70,7 @@ public class ClusterManagerItem<T extends ClusterItem> extends ClusterManager<Cl
     private Endereco GetEndereco(LatLng latLng) {
         Geocoder geocoder = new Geocoder(context, Import.get.locale);
         Endereco endereco = null;
-        try{
+        try {
             List<Address> addresses = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1);
             Address address = addresses.get(0);
 
@@ -87,7 +93,7 @@ public class ClusterManagerItem<T extends ClusterItem> extends ClusterManager<Cl
 
             if(endereco.getBairro() == null || endereco.getEstado() == null || endereco.getCidade() == null || endereco.getRua() == null)
                 return null;
-        }catch (Exception ex){
+        }catch (Exception ex) {
             endereco = null;
             Log.e(TAG, "GetEndereco: " + ex.getMessage());
         }

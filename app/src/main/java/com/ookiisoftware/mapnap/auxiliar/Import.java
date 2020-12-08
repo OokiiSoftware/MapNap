@@ -27,7 +27,6 @@ import com.ookiisoftware.mapnap.sqlite.SQLiteUsuario;
 import com.ookiisoftware.mapnap.sqlite.SQLiteConversa;
 import com.ookiisoftware.mapnap.sqlite.SQLiteMensagem;
 
-import java.sql.Connection;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.LinkedList;
@@ -131,17 +130,15 @@ public class Import  {
             c2.setNome(c.getNome());
             c2.setData(c.getData());
             c2.setPortas(c.getPortas());
-            c2.setStatus(c.getStatus());
             c2.setExcluido(c.isExcluido());
             c2.setEndereco(c.getEndereco());
             c2.setLatitude(c.getLatitude());
             c2.setLongitude(c.getLongitude());
             c2.setId_usuario(c.getId_usuario());
-            c2.setEm_manutencao(c.isEm_manutencao());
+            c2.setIsEmManutencao(c.isIsEmManutencao());
             c2.setClientes(new LinkedList<String>());
-            if(c.getClientes() != null)
-                for (String cliente : c.getClientes())
-                    c2.getClientes().add(cliente);
+            for (String cliente : c.getClientes())
+                c2.getClientes().add(cliente);
             if(c.getNovo_id() != null)
                 c2.setNovo_id(c.getNovo_id());
             if(c.getMotivo() != null)

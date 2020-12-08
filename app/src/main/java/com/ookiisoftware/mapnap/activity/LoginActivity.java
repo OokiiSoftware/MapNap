@@ -178,8 +178,8 @@ public class LoginActivity extends AppCompatActivity {
             // usuarios/id/dados
             firebase = Import.getFirebase.getRaiz()
                     .child(Constantes.Firebase.CHILD_USUARIO)
-                    .child(u.getId());
-//                    .child(Constantes.Firebase.CHILD_USUARIO_DADOS);
+                    .child(u.getId())
+                    .child(Constantes.Firebase.CHILD_USUARIO_DADOS);
 
             final DatabaseReference finalFirebase = firebase;
             firebase.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -213,8 +213,8 @@ public class LoginActivity extends AppCompatActivity {
                                     if (perfil.isMapnap()) {
                                         u.setNome((user.getDisplayName()));
                                         u.setFoto(user.getPhotoUrl() == null ? "null" : user.getPhotoUrl().toString());
-                                        u.setExcluido(false);
-                                        u.setOnline(true);
+                                        u.setIsExcluido(false);
+                                        u.setIsOnline(true);
                                         if (user.getPhoneNumber() != null)
                                             u.setTelefone(user.getPhoneNumber().substring(3));
                                         u.setData(Import.get.Data());

@@ -64,7 +64,7 @@ public class SQLiteUsuario extends SQLiteOpenHelper {
             values.put(FOTO, c.getFoto());
             values.put(PERFIL, c.getPerfilId());
             values.put(TELEFONE, c.getTelefone());
-            values.put(ONLINE, c.isOnline() ? 1 : 0);
+            values.put(ONLINE, c.isIsOnline() ? 1 : 0);
             db.insert(TABELA_CONTATOS, null, values);
             db.close();
             Log.e(TAG, "add OK: " + c.getId());
@@ -159,7 +159,7 @@ public class SQLiteUsuario extends SQLiteOpenHelper {
                     c.setFoto(cursor.getString(2));
                     c.setPerfilId(cursor.getString(3));
                     c.setTelefone(cursor.getString(4));
-                    c.setOnline(cursor.getInt(5) == 1);
+                    c.setIsOnline(cursor.getInt(5) == 1);
                     Descriptografar(c);
                     contatos.add(c);
                 } while (cursor.moveToNext());
@@ -191,7 +191,7 @@ public class SQLiteUsuario extends SQLiteOpenHelper {
             values.put(FOTO, u2.getFoto());
             values.put(PERFIL, u2.getPerfilId());
             values.put(TELEFONE, u2.getTelefone());
-            values.put(ONLINE, u2.isOnline() ? 1 : 0);
+            values.put(ONLINE, u2.isIsOnline() ? 1 : 0);
             db.update(TABELA_CONTATOS, values, ID + " = ?", new String[] { u2.getId() });
             db.close();
             Log.e(TAG, "update OK: " + u2.getId());
@@ -221,8 +221,8 @@ public class SQLiteUsuario extends SQLiteOpenHelper {
         u2.setFoto(u.getFoto());
         u2.setPerfilId(u.getPerfilId());
         u2.setTelefone(u.getTelefone());
-        u2.setOnline(u.isOnline());
-        u2.setExcluido(u.isExcluido());
+        u2.setIsOnline(u.isIsOnline());
+        u2.setIsExcluido(u.isIsExcluido());
         u2.setData(u.getData());
         if (u.getSenha() != null)
             u2.setSenha(u.getSenha());

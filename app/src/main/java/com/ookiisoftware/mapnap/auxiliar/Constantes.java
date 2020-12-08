@@ -36,17 +36,18 @@ public class Constantes {
         public static final String CHILD_CLIENTES = "clientes";
         public static final String CHILD_PON = "pon";
         public static final String CHILD_DATA = "data";
-        public static final String CHILD_ALERT = "em_manutencao";
+        public static final String CHILD_ALERT = "isEmManutencao";
 
         public static final String CHILD_USUARIO = "usuarios";
         public static final String CHILD_CONTATO = "contatos";
         public static final String CHILD_ID_USUARIO = "id_usuario";
-//        public static final String CHILD_USUARIO_DADOS = "_dados";
+        public static final String CHILD_USUARIO_DADOS = "_dados";
         public static final String CHILD_USUARIO_CONVERSAS = "conversas";
 
         public static final String CHILD_PERFIL_ACESSO = "perfil_acesso";
 
         public static final String CHILD_CAIXAS = "caixas";
+        public static final String CHILD_IS_EXCLUIDO = "isExcluido";
         public static final String CHILD_CAIXAS_ALTERADAS = "caixas_alteradas";
         public static final String CHILD_CAIXAS_EXCLUIDAS = "caixas_excluidas";
         //===================== Firebase Storage
